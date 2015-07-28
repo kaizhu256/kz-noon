@@ -16,9 +16,9 @@ lightweight swagger-ui crud-api backed by mongodb
 | git-branch : | [master](https://github.com/kaizhu256/node-kz-noon/tree/master) | [beta](https://github.com/kaizhu256/node-kz-noon/tree/beta) | [alpha](https://github.com/kaizhu256/node-kz-noon/tree/alpha)|
 |--:|:--|:--|:--|
 | test-server : | [![heroku.com test-server](https://kaizhu256.github.io/node-kz-noon/heroku-logo.75x25.png)](https://hrku01-kz-noon-master.herokuapp.com) | [![heroku.com test-server](https://kaizhu256.github.io/node-kz-noon/heroku-logo.75x25.png)](https://hrku01-kz-noon-beta.herokuapp.com) | [![heroku.com test-server](https://kaizhu256.github.io/node-kz-noon/heroku-logo.75x25.png)](https://hrku01-kz-noon-alpha.herokuapp.com)|
-| test-report : | [![test-report](https://kaizhu256.github.io/node-kz-noon/build..master..travis-ci.org/test-report.badge.svg)](https://kaizhu256.github.io/node-kz-noon/build..master..travis-ci.org/test-report.html) | [![test-report](https://kaizhu256.github.io/node-kz-noon/build..beta..travis-ci.org/test-report.badge.svg)](https://kaizhu256.github.io/node-kz-noon/build..beta..travis-ci.org/test-report.html) | [![test-report](https://kaizhu256.github.io/node-kz-noon/build..alpha..travis-ci.org/test-report.badge.svg)](https://kaizhu256.github.io/node-kz-noon/build..alpha..travis-ci.org/test-report.html)|
-| coverage : | [![istanbul-lite coverage](https://kaizhu256.github.io/node-kz-noon/build..master..travis-ci.org/coverage.badge.svg)](https://kaizhu256.github.io/node-kz-noon/build..master..travis-ci.org/coverage.html/index.html) | [![istanbul-lite coverage](https://kaizhu256.github.io/node-kz-noon/build..beta..travis-ci.org/coverage.badge.svg)](https://kaizhu256.github.io/node-kz-noon/build..beta..travis-ci.org/coverage.html/index.html) | [![istanbul-lite coverage](https://kaizhu256.github.io/node-kz-noon/build..alpha..travis-ci.org/coverage.badge.svg)](https://kaizhu256.github.io/node-kz-noon/build..alpha..travis-ci.org/coverage.html/index.html)|
-| build-artifacts : | [![build-artifacts](https://kaizhu256.github.io/node-kz-noon/glyphicons_144_folder_open.png)](https://github.com/kaizhu256/node-kz-noon/tree/gh-pages/build..master..travis-ci.org) | [![build-artifacts](https://kaizhu256.github.io/node-kz-noon/glyphicons_144_folder_open.png)](https://github.com/kaizhu256/node-kz-noon/tree/gh-pages/build..beta..travis-ci.org) | [![build-artifacts](https://kaizhu256.github.io/node-kz-noon/glyphicons_144_folder_open.png)](https://github.com/kaizhu256/node-kz-noon/tree/gh-pages/build..alpha..travis-ci.org)|
+| test-report : | [![test-report](https://kaizhu256.github.io/node-kz-noon/build..master..codeship.io/test-report.badge.svg)](https://kaizhu256.github.io/node-kz-noon/build..master..codeship.io/test-report.html) | [![test-report](https://kaizhu256.github.io/node-kz-noon/build..beta..codeship.io/test-report.badge.svg)](https://kaizhu256.github.io/node-kz-noon/build..beta..codeship.io/test-report.html) | [![test-report](https://kaizhu256.github.io/node-kz-noon/build..alpha..codeship.io/test-report.badge.svg)](https://kaizhu256.github.io/node-kz-noon/build..alpha..codeship.io/test-report.html)|
+| coverage : | [![istanbul-lite coverage](https://kaizhu256.github.io/node-kz-noon/build..master..codeship.io/coverage.badge.svg)](https://kaizhu256.github.io/node-kz-noon/build..master..codeship.io/coverage.html/index.html) | [![istanbul-lite coverage](https://kaizhu256.github.io/node-kz-noon/build..beta..codeship.io/coverage.badge.svg)](https://kaizhu256.github.io/node-kz-noon/build..beta..codeship.io/coverage.html/index.html) | [![istanbul-lite coverage](https://kaizhu256.github.io/node-kz-noon/build..alpha..codeship.io/coverage.badge.svg)](https://kaizhu256.github.io/node-kz-noon/build..alpha..codeship.io/coverage.html/index.html)|
+| build-artifacts : | [![build-artifacts](https://kaizhu256.github.io/node-kz-noon/glyphicons_144_folder_open.png)](https://github.com/kaizhu256/node-kz-noon/tree/gh-pages/build..master..codeship.io) | [![build-artifacts](https://kaizhu256.github.io/node-kz-noon/glyphicons_144_folder_open.png)](https://github.com/kaizhu256/node-kz-noon/tree/gh-pages/build..beta..codeship.io) | [![build-artifacts](https://kaizhu256.github.io/node-kz-noon/glyphicons_144_folder_open.png)](https://github.com/kaizhu256/node-kz-noon/tree/gh-pages/build..alpha..codeship.io)|
 
 #### master branch
 - stable branch
@@ -733,7 +733,10 @@ shBuildGithubUploadCleanup() {
 
 # upload build-artifacts to github,
 # and if number of commits > 16, then squash older commits
-COMMIT_LIMIT=16 shBuildGithubUpload || exit $?
+if [ "$CI_NAME" = "codeship" ]
+then
+    COMMIT_LIMIT=16 shBuildGithubUpload || exit $?
+fi
 
 # exit with $EXIT_CODE
 exit $EXIT_CODE
