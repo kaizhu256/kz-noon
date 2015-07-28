@@ -692,18 +692,21 @@ shBuild() {
     [ "$(node --version)" \< "v0.12" ] && return
 
     # deploy app to heroku
-    shRun shHerokuDeploy hrku01-$npm_package_name-$CI_BRANCH || return $?
+    if [ "$CI_NAME" = "codeship" ]
+    then
+        shRun shHerokuDeploy hrku01-$npm_package_name-$CI_BRANCH || return $?
+    fi
 
-    #!! # test deployed app to heroku
-    #!! if [ "$CI_BRANCH" = alpha ] ||
-        #!! [ "$CI_BRANCH" = beta ] ||
-        #!! [ "$CI_BRANCH" = master ]
-    #!! then
-        #!! TEST_URL="https://hrku01-$npm_package_name-$CI_BRANCH.herokuapp.com" \
-            #!! || return $?
-        #!! TEST_URL="$TEST_URL?modeTest=phantom&timeExit={{timeExit}}" || return $?
-        #!! MODE_BUILD=herokuTest shPhantomTest "$TEST_URL" || return $?
-    #!! fi
+    # test deployed app to heroku
+    if [ "$CI_BRANCH" = alpha ] ||
+        [ "$CI_BRANCH" = beta ] ||
+        [ "$CI_BRANCH" = master ]
+    then
+        TEST_URL="https://hrku01-$npm_package_name-$CI_BRANCH.herokuapp.com" \
+            || return $?
+        TEST_URL="$TEST_URL?modeTest=phantom&timeExit={{timeExit}}" || return $?
+        MODE_BUILD=herokuTest shPhantomTest "$TEST_URL" || return $?
+    fi
 }
 shBuild
 
